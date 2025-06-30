@@ -5,7 +5,8 @@ namespace api.Mappers;
 
 public static class StockMappers
 {
-    public static StockDto ToStockDto(this Stock stockModel)
+    public static StockDto ToStockDto(this Stock stockModel) 
+        // this - extension method for Stock model
     {
         return new StockDto()
         {
