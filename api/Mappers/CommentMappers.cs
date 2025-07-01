@@ -7,7 +7,7 @@ public static class CommentMappers
 {
     public static CommentDto ToCommentDto(this Comment commentModel)
     {
-        return new CommentDto()
+        return new CommentDto
         {
             Id = commentModel.Id,
             Title = commentModel.Title,
@@ -17,9 +17,9 @@ public static class CommentMappers
         };
     }
     
-    public static Comment ToCommentFromCreate(this CreateCommentDto commentDto, int stockId)
+    public static Comment ToCommentFromCreateDto(this CreateCommentDto commentDto, int stockId)
     {
-        return new Comment()
+        return new Comment
         {
             Title = commentDto.Title,
             Content = commentDto.Content,

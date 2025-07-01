@@ -39,8 +39,24 @@ public class CommentController : ControllerBase
     {
         var stock = await _stockRepo.StockExistsAsync(stockId);
         if (!stock) return BadRequest("Stock doesn't exist");
-        var comment = commentDto.ToCommentFromCreate(stockId);
+        var comment = commentDto.ToCommentFromCreateDto(stockId);
         await _commentRepo.CreateAsync(comment);
         return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment.ToCommentDto());
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateDto)
+    {
+        var comment = await _commentRepo.UpdateAsync(id, updateDto);
+        if (comment == null) return NotFound();
+        return Ok(comment.ToCommentDto());
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var comment = await _commentRepo.DeleteAsync(id);
+        if (comment == null) return NotFound();
+        return NoContent();
     }
 }
