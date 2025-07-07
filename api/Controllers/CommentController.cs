@@ -16,12 +16,14 @@ public class CommentController : ControllerBase
     private readonly ICommentRepository _commentRepo;
     private readonly IStockRepository _stockRepo;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IFMPService _fmpService;
 
-    public CommentController(ICommentRepository commentRepo, IStockRepository stockRepo, UserManager<AppUser> userManager)
+    public CommentController(ICommentRepository commentRepo, IStockRepository stockRepo, UserManager<AppUser> userManager, IFMPService fmpService)
     {
         _commentRepo = commentRepo;
         _stockRepo = stockRepo;
         _userManager = userManager;
+        _fmpService = fmpService;
     }
 
     [HttpGet]
@@ -42,17 +44,22 @@ public class CommentController : ControllerBase
         return Ok(comment.ToCommentDto());
     }
 
-    [HttpPost("{stockId:int}")]
-    public async Task<IActionResult> Create([FromRoute] int stockId, CreateCommentDto commentDto)
+    [HttpPost("{symbol:alpha}")]
+    public async Task<IActionResult> Create([FromRoute] string symbol, CreateCommentDto commentDto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
-        var stock = await _stockRepo.StockExistsAsync(stockId);
-        if (!stock) return BadRequest("Stock doesn't exist");
+        var stock = await _stockRepo.GetBySymbolAsync(symbol);
+        if (stock == null)
+        {
+            stock = await _fmpService.FindStockBySymbolAsync(symbol);
+            if (stock == null) return BadRequest("Stock does not exist");
+            await _stockRepo.CreateAsync(stock);
+        }
         
         var userName = User.GetUsername();
         var appUser = await _userManager.FindByNameAsync(userName);
         
-        var comment = commentDto.ToCommentFromCreateDto(stockId);
+        var comment = commentDto.ToCommentFromCreateDto(stock.Id);
         comment.AppUserId = appUser.Id;
         await _commentRepo.CreateAsync(comment);
         return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment.ToCommentDto());

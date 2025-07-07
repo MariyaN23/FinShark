@@ -33,4 +33,17 @@ public static class StockMappers
             MarketCap = stockDto.MarketCap,
         };
     }
+
+    public static Stock ToStockFromFMP(this FMPStock stock)
+    {
+        return new Stock
+        {
+            Symbol = stock.symbol,
+            CompanyName = stock.companyName,
+            Purchase = (decimal)stock.price,
+            LastDiv = (decimal)stock.lastDiv,
+            Industry = stock.industry,
+            MarketCap = stock.mktCap,
+        };
+    }
 }
