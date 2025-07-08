@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "./logo.png";
-import "./Navbar.css";
 import { useAuth } from "../../Context/useAuth";
 
 interface Props {}
@@ -23,7 +22,7 @@ const Navbar = (props: Props) => {
         </div>
         {isLoggedIn() ? (
           <div className="hidden lg:flex items-center space-x-6 text-back">
-            <div className="hover:text-darkBlue">Welcome, {user?.userName}</div>
+            <div className="hover:text-darkBlue">Welcome, {user?.username}</div>
             <a
               onClick={logout}
               className="px-8 py-3 font-bold rounded text-white bg-lightGreen hover:opacity-70"

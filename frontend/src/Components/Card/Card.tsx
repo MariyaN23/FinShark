@@ -1,6 +1,5 @@
 import React, { SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
-import "./Card.css";
 import { CompanySearch } from "../../company";
 import AddPortfolio from "../Portfolio/AddPortfolio/AddPortfolio";
 
