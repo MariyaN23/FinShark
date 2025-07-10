@@ -41,7 +41,7 @@ const StockCommentForm = ({ symbol, handleComment }: Props) => {
         <textarea
           id="comment"
           rows={6}
-          className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+          className="resize-none px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
           placeholder="Write a comment..."
           {...register("content")}
         ></textarea>
